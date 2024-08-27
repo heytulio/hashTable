@@ -6,8 +6,10 @@ import linkedList.LinkedList;
 public class HashTable {
 	private LinkedList[] vetor;
 	private int m;
+	private int size;
+	private int margem;
+	private int a;
 
-	@SuppressWarnings("unchecked")
 	public HashTable(int n, int margem, int a) {
 		int m0 = n / a;
 
@@ -18,9 +20,20 @@ public class HashTable {
 				break;
 			}
 		}
-
+		this.margem = margem;
+		this.a = a;
 		vetor = new LinkedList[m];
+		System.out.println("M = " + m);
+	}
 
+	private int hhash(String chave) {
+		int somador = 0;
+		for (int i = 0; i < chave.length(); i++) {
+			somador += (int) chave.charAt(i);
+		}
+		int x = (somador);
+
+		return x % m;
 	}
 
 	private int hash(String chave) {
@@ -28,58 +41,141 @@ public class HashTable {
 		for (int i = 0; i < chave.length(); i++) {
 			somador += (int) chave.charAt(i);
 		}
+		if (somador.length() > 6) {
+			somador = somador.substring(somador.length() - 6);
+		}
 
-		int x = Integer.parseInt(somador);
+		int x = Integer.parseInt(somador) * chave.length();
 
 		return x % m;
 	}
 
 	public void insere(String str) {
-		int hash = hash(str);
+		if (str != null) {
+			str = str.trim();
+			if (str == "") {
+				return;
+			}
+			int hash = hash(str);
+			if (vetor[hash] == null) {
+				LinkedList lista = new LinkedList();
+				vetor[hash] = lista;
+				lista.insert(str);
+				size++;
+				return;
+			}
 
-		if (vetor[hash] == null) {
-			LinkedList lista = new LinkedList();
-			vetor[hash] = lista;
-			lista.insert(str);
-			return;
+			vetor[hash].insert(str);
+			size++;
+
+			if (mediaPorPosicao() >= a * (1 + margem / 100.0)) {
+				arrumaHashTable();
+			}
 		}
-
-		vetor[hash].insert(str);
 	}
 
 	public void remove(String str) {
-		int hash = hash(str);
+		if (str != null) {
+			str = str.trim();
+			if (str == "") {
+				return;
+			}
+			int hash = hash(str);
 
-		if (vetor[hash] == null) {
+			if (vetor[hash] == null) {
+				return;
+			}
+			vetor[hash].remove(str);
+			size--;
 			return;
 		}
-
-		vetor[hash].remove(str);
-		return;
 	}
 
-	public boolean buscar(String str) {
-		int hash = hash(str);
-		LinkedList lista = vetor[hash];
-		if (lista == null) {
+	public boolean busca(String str) {
+		if (str != null) {
+			str = str.trim();
+			if (str == "") {
+				return false;
+			}
+			int hash = hash(str);
+			LinkedList lista = vetor[hash];
+			if (lista == null) {
+				return false;
+			}
+
+			if (lista.find(str)) {
+				return true;
+			}
+
 			return false;
 		}
-
-		if (lista.find() != null) {
-			return true;
-		}
-
 		return false;
 	}
+
 	public void print() {
-		vetor.toString();
-		
+		if (vetor == null) {
+			return;
+		}
+//		for (LinkedList i : vetor) {
+//			if (i != null) {
+//				System.out.print("[");
+//				i.print();
+//				System.out.println("]");
+//			}
+//		}
+
+		for (int i = 0; i < vetor.length; i++) {
+			if (vetor[i] != null) {
+				System.out.print(i + ": ");
+				System.out.print("[");
+				vetor[i].print();
+				System.out.println("]");
+			}
+		}
+		System.out.println();
+
 	}
-//	public void print(int info) {
-//		int hash = hash(str);
-//		LinkedList<String> lista = vetor[hash];
-//	}
-	
+
+	private double mediaPorPosicao() {
+		return size / m;
+	}
+
+	private void arrumaHashTable() {
+
+		int newM = m * 2;
+
+		boolean[] primos = crivoDeAtkin(newM * 2);
+
+		for (int i = newM; i < primos.length; i++) {
+			if (primos[i]) {
+				newM = i;
+				break;
+			}
+		}
+
+		LinkedList[] newArray = new LinkedList[newM];
+		m = newM;
+
+		for (LinkedList i : vetor) {
+			if (i != null) {
+				String[] values = i.getValues();
+				for (String s : values) {
+					int hash = hash(s);
+
+					if (newArray[hash] == null) {
+						LinkedList l = new LinkedList();
+						l.insert(s);
+						newArray[hash] = l;
+						continue;
+					}
+					newArray[hash].insert(s);
+				}
+			}
+		}
+
+		vetor = newArray;
+
+	}
 
 	private static boolean[] crivoDeAtkin(int limite) {
 		boolean[] primos = new boolean[limite + 1];

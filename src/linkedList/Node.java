@@ -2,18 +2,18 @@ package linkedList;
 
 public class Node {
 
-	private int info;
+	private String info;
 	private Node prox;
 
-	public Node(int info) {
+	public Node(String info) {
 		this.info = info;
 	}
 
-	public int getInfo() {
+	public String getInfo() {
 		return info;
 	}
 
-	public void setInfo(int info) {
+	public void setInfo(String info) {
 		this.info = info;
 	}
 
