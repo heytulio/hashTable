@@ -23,7 +23,7 @@ public class HashTable {
 		this.margem = margem;
 		this.a = a;
 		vetor = new LinkedList[m];
-		System.out.println("M = " + m);
+//		System.out.println("M = " + m);
 	}
 
 	private int hhash(String chave) {
@@ -44,9 +44,7 @@ public class HashTable {
 		if (somador.length() > 6) {
 			somador = somador.substring(somador.length() - 6);
 		}
-
 		int x = Integer.parseInt(somador) * chave.length();
-
 		return x % m;
 	}
 
@@ -61,6 +59,7 @@ public class HashTable {
 				LinkedList lista = new LinkedList();
 				vetor[hash] = lista;
 				lista.insert(str);
+				
 				size++;
 				return;
 			}
@@ -86,6 +85,9 @@ public class HashTable {
 				return;
 			}
 			vetor[hash].remove(str);
+			if(vetor[hash].isEmpty()) {
+				vetor[hash] = null;
+			}
 			size--;
 			return;
 		}
@@ -110,6 +112,27 @@ public class HashTable {
 			return false;
 		}
 		return false;
+	}
+	
+	public int buscaIndex(String str) {
+		if (str != null) {
+			str = str.trim();
+			if (str == "") {
+				return -1;
+			}
+			int hash = hash(str);
+			LinkedList lista = vetor[hash];
+			if (lista == null) {
+				return -1;
+			}
+
+			if (lista.find(str)) {
+				return hash;
+			}
+
+			return -1;
+		}
+		return -1;
 	}
 
 	public void print() {
@@ -176,6 +199,15 @@ public class HashTable {
 		vetor = newArray;
 
 	}
+	
+	public int size() {
+		return size;
+	}
+	
+	public LinkedList[] getTable() {
+		return vetor;
+	}
+	
 
 	private static boolean[] crivoDeAtkin(int limite) {
 		boolean[] primos = new boolean[limite + 1];

@@ -1,33 +1,37 @@
 package aplication;
 
+import java.util.Hashtable;
+
 import tabelaHash.HashTable;
 
 public class Program {
 
 	public static void main(String[] args) {
-		HashTable hs = new HashTable(1000,50,6);
-		hs.insere(" ");
-		hs.insere("pablo");
-		hs.insere("mario");
-		hs.insere("abel");
-		hs.insere("maria");
-		hs.insere("mariana");
-		hs.insere("esther");
-		hs.insere("julia");
-		hs.insere("tereza");
-		hs.insere("juliana");
-		hs.insere("joana");
-		hs.insere("fernando");
-		hs.insere("priscila");
-		hs.insere("henrique");
-		hs.insere("josé");
-		System.out.println(hs.busca("paulo"));
-		hs.print();
-		hs.insere("carlos");
-		hs.insere("");
 
-		hs.insere("sergio");
-		hs.print();
+		System.out.println("iniciando");
+		
+//		Hashtable<String, String> ht = new Hashtable<String, String>();
+//		
+//		ht.put("claudio", "claudio");
+//		ht.put("joana", "joana");
+//		ht.put("maria", "maria");
+//		ht.put("roberto", "roberto");
+//		ht.put("vladmir", "vladmir");
+//		ht.put("joel", "joel");
+		
+		HashTable ht = new HashTable(22, 75, 2);
+		
+		ht.insere("claudio");
+		ht.insere("joana");
+		ht.insere("maria");
+		ht.insere("roberto");
+		ht.insere("vladmir");
+		ht.insere("joel");
+		
+		
+
+		System.out.println("encerrando");
+		
 
 
 

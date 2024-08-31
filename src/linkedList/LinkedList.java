@@ -45,7 +45,7 @@ public class LinkedList {
 		return false;
 	}
 	
-	private boolean isEmpty() {
+	public boolean isEmpty() {
 		return ref == null;
 	}
 	
